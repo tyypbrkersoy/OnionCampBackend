@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using OnionCamp.Application.Abstractions;
+using OnionCamp.Application.Abstractions.Storage;
 using OnionCamp.Application.Repositories.EntityRepositories;
 using OnionCamp.Application.RequestParameters;
 using OnionCamp.Application.ViewModels.Products;
 using OnionCamp.Domain.Entities;
 using System.Net;
+using File = OnionCamp.Domain.Entities.File;
 
 namespace OnionCamp.Presentation.Controllers
 {
@@ -15,13 +18,41 @@ namespace OnionCamp.Presentation.Controllers
     {
         private readonly IProductWriteRepository _productWriteRepository;
         private readonly IProductReadRepository _productReadRepository;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        readonly IFileReadRepository _fileReadRepository;
+        readonly IFileWriteRepository _fileWriteRepository;
+        readonly IProductImageFileReadRepository _productImageFileReadRepository;
+        readonly IProductImageFileWriteRepository _productImageFileWriteRepository;
+        readonly IInvoiceFileReadRepository _invoiceFileReadRepository;
+        readonly IInvoiceFileWriteRepository _invoiceFileWriteRepository;
+        readonly IStorageService _storageService;
+        readonly IConfiguration configuration;
+
 
         public ProductsController(
             IProductWriteRepository productWriteRepository,
-            IProductReadRepository productReadRepository)
+            IProductReadRepository productReadRepository,
+            IWebHostEnvironment _webHostEnvironment,
+            IFileReadRepository fileReadRepository,
+            IFileWriteRepository fileWriteRepository,
+            IProductImageFileReadRepository productImageFileReadRepository,
+            IProductImageFileWriteRepository productImageFileWriteRepository,
+            IInvoiceFileReadRepository invoiceFileReadRepository,
+            IInvoiceFileWriteRepository invoiceFileWriteRepository,
+            IStorageService storageService,
+            IConfiguration configuration)
         {
             _productReadRepository = productReadRepository;
             _productWriteRepository = productWriteRepository;
+            this._webHostEnvironment = _webHostEnvironment;
+            _fileReadRepository = fileReadRepository;
+            _fileWriteRepository = fileWriteRepository;
+            _productImageFileReadRepository = productImageFileReadRepository;
+            _productImageFileWriteRepository = productImageFileWriteRepository;
+            _invoiceFileReadRepository = invoiceFileReadRepository;
+            _invoiceFileWriteRepository = invoiceFileWriteRepository;
+            _storageService = storageService;
+            this.configuration = configuration;
         }
 
         [HttpGet]
@@ -79,7 +110,6 @@ namespace OnionCamp.Presentation.Controllers
             return Ok();
         }
 
-
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
@@ -88,6 +118,52 @@ namespace OnionCamp.Presentation.Controllers
             return Ok(); 
         }
 
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Upload(string id)
+        {
+
+            List<(string fileName, string pathOrContainerName)> result = await _storageService.UploadAsync("photo-images", Request.Form.Files);
+
+            Product product = await _productReadRepository.GetByIdAsync(id);
+
+            await _productImageFileWriteRepository.AddRangeAsync(result.Select(r => new ProductImageFile
+            {
+                FileName = r.fileName,
+                Path = r.pathOrContainerName,
+                Storage = _storageService.StorageName,
+                Products = new List<Product>() { product}
+
+            }).ToList());
+
+            await _productImageFileWriteRepository.SaveAsync();
+
+            return Ok();
+        }
+
+        [HttpGet("[action]/{id}")]
+        public async Task<IActionResult> GetProductImages(string id)
+        {
+            Product? product = await _productReadRepository.Table.Include(p => p.ProductImageFiles)
+                .FirstOrDefaultAsync(p => p.Id == Guid.Parse(id));
+
+            return Ok(product.ProductImageFiles.Select(p => new
+            {
+                Path = $"{configuration["StorageUrl:AzureUrl"]}/{p.Path}",
+                p.FileName,
+                p.Id
+            }));
+        }
+
+        [HttpDelete("[action]/{id}")]
+        public async Task<IActionResult> DeleteProductImage(string id, string imageId)
+        {
+            Product? product = await _productReadRepository.Table.Include(p => p.ProductImageFiles)
+                .FirstOrDefaultAsync(p => p.Id == Guid.Parse(id));
+            ProductImageFile productImageFile = product.ProductImageFiles.FirstOrDefault(p=> p.Id == Guid.Parse(imageId));
+            product.ProductImageFiles.Remove(productImageFile);
+            await _productWriteRepository.SaveAsync();
+            return Ok();
+        }
 
     }
 }

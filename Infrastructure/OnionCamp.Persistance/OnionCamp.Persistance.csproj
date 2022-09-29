@@ -22,4 +22,8 @@
     <ProjectReference Include="..\..\Core\OnionCamp.Application\OnionCamp.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Concretes\" />
+  </ItemGroup>
+
 </Project>

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using OnionCamp.Persistance.Contexts;
@@ -11,9 +12,10 @@ using OnionCamp.Persistance.Contexts;
 namespace OnionCamp.Persistance.Migrations
 {
     [DbContext(typeof(OnionCampDbContext))]
-    partial class OnionCampDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220924151840_mig2")]
+    partial class mig2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,18 +55,6 @@ namespace OnionCamp.Persistance.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("FileName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Path")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Storage")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -147,27 +137,9 @@ namespace OnionCamp.Persistance.Migrations
                     b.ToTable("OrderProduct");
                 });
 
-            modelBuilder.Entity("ProductProductImageFile", b =>
-                {
-                    b.Property<Guid>("ProductImageFilesId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("ProductsId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("ProductImageFilesId", "ProductsId");
-
-                    b.HasIndex("ProductsId");
-
-                    b.ToTable("ProductProductImageFile");
-                });
-
             modelBuilder.Entity("OnionCamp.Domain.Entities.InvoiceFile", b =>
                 {
                     b.HasBaseType("OnionCamp.Domain.Entities.File");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("numeric");
 
                     b.HasDiscriminator().HasValue("InvoiceFile");
                 });
@@ -195,21 +167,6 @@ namespace OnionCamp.Persistance.Migrations
                     b.HasOne("OnionCamp.Domain.Entities.Order", null)
                         .WithMany()
                         .HasForeignKey("OrdersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("OnionCamp.Domain.Entities.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("ProductProductImageFile", b =>
-                {
-                    b.HasOne("OnionCamp.Domain.Entities.ProductImageFile", null)
-                        .WithMany()
-                        .HasForeignKey("ProductImageFilesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
