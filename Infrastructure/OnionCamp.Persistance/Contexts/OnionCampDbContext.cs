@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using OnionCamp.Domain.Entities;
 using OnionCamp.Domain.Entities.Common;
+using OnionCamp.Domain.Entities.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +12,7 @@ using File = OnionCamp.Domain.Entities.File;
 
 namespace OnionCamp.Persistance.Contexts
 {
-    public class OnionCampDbContext : DbContext
+    public class OnionCampDbContext : IdentityDbContext<AppUser, AppRole ,string>
     {
         public OnionCampDbContext(DbContextOptions options) : base(options)
         {

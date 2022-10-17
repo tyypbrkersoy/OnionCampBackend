@@ -3,7 +3,9 @@ using OninoCamp.Infrastructure.Enums;
 using OninoCamp.Infrastructure.Services.Storage;
 using OninoCamp.Infrastructure.Services.Storage.Azure;
 using OninoCamp.Infrastructure.Services.Storage.Local;
+using OninoCamp.Infrastructure.Services.Token;
 using OnionCamp.Application.Abstractions.Storage;
+using OnionCamp.Application.Abstractions.Token;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +19,7 @@ namespace OninoCamp.Infrastructure
         public static void AddInfrastructureServices(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddScoped<IStorageService, StorageService>();
+            serviceCollection.AddScoped<ITokenHandler, TokenHandler>();
         }
 
         public static void AddStorage<T>(this IServiceCollection serviceCollection)  where T : Storage, IStorage
