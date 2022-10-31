@@ -10,6 +10,7 @@ using OnionCamp.Application;
 using OnionCamp.Application.Validation.Products;
 using OnionCamp.Persistance;
 using OnionCamp.Presentation.Configurations.ColumnWriters;
+using OnionCamp.Presentation.Extensions;
 using Serilog;
 using Serilog.Context;
 using Serilog.Core;
@@ -101,6 +102,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
+app.ConfigureExceptionHandler<Program>(app.Services.GetRequiredService<ILogger<Program>>());
 app.UseStaticFiles();
 
 app.UseSerilogRequestLogging();
