@@ -53,7 +53,7 @@ namespace OnionCamp.Persistance.Services
             if (user != null)
             {
                 user.RefreshToken = refreshToken;
-                user.RefreshTokenEndDate= accessTokenDate.AddSeconds(refreshTokenLifeTime);
+                user.RefreshTokenEndDate= accessTokenDate.AddMinutes(refreshTokenLifeTime);
                 await _userManager.UpdateAsync(user);
             }
             else

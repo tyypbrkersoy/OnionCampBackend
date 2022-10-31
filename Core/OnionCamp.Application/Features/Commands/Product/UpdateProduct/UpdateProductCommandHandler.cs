@@ -6,18 +6,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace OnionCamp.Application.Features.Commands.Product.UpdateProduct
 {
     public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommandRequest, UpdateProductCommandResponse>
     {
-        IProductReadRepository _productReadRepository;
-        IProductWriteRepository _productWriteRepository;
+        readonly IProductReadRepository _productReadRepository;
+        readonly IProductWriteRepository _productWriteRepository;
+        readonly ILogger<UpdateProductCommandHandler> _logger;
 
-        public UpdateProductCommandHandler(IProductReadRepository productReadRepository, IProductWriteRepository productWriteRepository = null)
+        public UpdateProductCommandHandler(IProductReadRepository productReadRepository, IProductWriteRepository productWriteRepository = null, ILogger<UpdateProductCommandHandler> logger = null)
         {
             _productReadRepository = productReadRepository;
             _productWriteRepository = productWriteRepository;
+            _logger = logger;
         }
 
         public async Task<UpdateProductCommandResponse> Handle(UpdateProductCommandRequest request, CancellationToken cancellationToken)
@@ -27,6 +30,7 @@ namespace OnionCamp.Application.Features.Commands.Product.UpdateProduct
             product.Stock = request.Stock;
             product.Price = request.Price;
             await _productWriteRepository.SaveAsync();
+            _logger.LogInformation("Product Güncellendi.");
             return new();
         }
     }
