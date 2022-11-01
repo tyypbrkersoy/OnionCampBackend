@@ -19,6 +19,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presenation", "Presenation"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnionCamp.Presentation", "Presentation\OnionCamp.Presentation\OnionCamp.Presentation.csproj", "{BC90BB72-2604-4E62-ADE7-56C44CB53B3B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnionCamp.SignalR", "Infrastructure\OnionCamp.SignalR\OnionCamp.SignalR.csproj", "{E1F694BA-604A-44F0-9E63-3820AB3B4263}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{BC90BB72-2604-4E62-ADE7-56C44CB53B3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC90BB72-2604-4E62-ADE7-56C44CB53B3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC90BB72-2604-4E62-ADE7-56C44CB53B3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1F694BA-604A-44F0-9E63-3820AB3B4263}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1F694BA-604A-44F0-9E63-3820AB3B4263}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1F694BA-604A-44F0-9E63-3820AB3B4263}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1F694BA-604A-44F0-9E63-3820AB3B4263}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,6 +61,7 @@ Global
 		{75993EAD-0096-43B3-9598-80DB33949A45} = {E6726E19-1F7A-44DF-BCD7-7AD3E8AB7984}
 		{C7A7832D-3B05-4150-BC8E-D70CEC1469F1} = {E6726E19-1F7A-44DF-BCD7-7AD3E8AB7984}
 		{BC90BB72-2604-4E62-ADE7-56C44CB53B3B} = {62B56ADB-0553-4E76-9EB4-086B20E55E06}
+		{E1F694BA-604A-44F0-9E63-3820AB3B4263} = {E6726E19-1F7A-44DF-BCD7-7AD3E8AB7984}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7AB9CFF3-50F1-47BD-9CE5-3E8EC336DFB4}

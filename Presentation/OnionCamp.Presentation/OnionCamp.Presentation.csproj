@@ -21,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Infrastructure\OninoCamp.Infrastructure\OninoCamp.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Infrastructure\OnionCamp.Persistance\OnionCamp.Persistance.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\OnionCamp.SignalR\OnionCamp.SignalR.csproj" />
   </ItemGroup>
 
   <ItemGroup>

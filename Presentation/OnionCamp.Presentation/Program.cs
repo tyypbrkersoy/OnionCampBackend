@@ -11,6 +11,8 @@ using OnionCamp.Application.Validation.Products;
 using OnionCamp.Persistance;
 using OnionCamp.Presentation.Configurations.ColumnWriters;
 using OnionCamp.Presentation.Extensions;
+using OnionCamp.SignalR;
+using OnionCamp.SignalR.Hubs;
 using Serilog;
 using Serilog.Context;
 using Serilog.Core;
@@ -23,6 +25,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddPersistanceServices();
 builder.Services.AddInfrastructureServices();
 builder.Services.AddAplicationService();
+builder.Services.AddSignalRServices();
 
 //builder.Services.AddStorage<LocalStorage>();
 builder.Services.AddStorage<AzureStorage>();
@@ -125,5 +128,6 @@ app.Use(async (context, next) =>
 });
 
 app.MapControllers();
+app.MapHubs();
 
 app.Run();
